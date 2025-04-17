@@ -44,7 +44,7 @@ jobs:
 
       - name: Get Current Date
         id: date
-        run: echo "DATE=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
+        run: echo "BUILD_DATE=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
 
       - name: Rename apk name with app name and date
         run: |
