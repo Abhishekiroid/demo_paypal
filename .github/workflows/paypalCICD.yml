@@ -13,7 +13,6 @@ jobs:
 
     env:
       APP_NAME: PAYPAL
-      BUILD_DATE: ${{ steps.date.outputs.date }}
 
     steps:
       - name: checkout Respository
@@ -45,7 +44,7 @@ jobs:
 
       - name: Get Current Date
         id: date
-        run: echo "date=$(date + '%d-%m-%Y')" >> $GITHUB_OUTPUT
+        run: echo "DATE=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
 
       - name: Rename apk name with app name and date
         run: |
