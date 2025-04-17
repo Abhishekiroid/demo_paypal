@@ -1,0 +1,63 @@
+name: PAYPAL CI-CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      APP_NAME: PAYPAL
+      BUILD_DATE: ${{ steps.date.outputs.date }}
+
+    steps:
+      - name: checkout Respository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+            restore-keys: |
+             gradle-${{ runner.os }}-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build and Run Tests
+        run: ./gradlew assembleDebug test
+
+      - name: Get Current Date
+        id: date
+        run: echo "date=$(date + '%d-%m-%Y')" >> $GITHUB_OUTPUT
+
+      - name: Rename apk name with app name and date
+        run: |
+          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/${{ env.APP_NAME }}_${{ env.BUILD_DATE }}.apk
+
+
+      - name: Upload Artifact to Testfairy
+        run: |
+          curl https://upload.testfairy.com/api/upload \
+          -F api_key="${{ secrets.TESTFAIRY_KEY }}" \
+          -F apk_file=@app/build/outputs/apk/debug/${{ env.APP_NAME }}_${{ env.BUILD_DATE }}.apk \
+          -F testers_groups="internal-testers" \
+          -F notify="on" \
+          -F comment="Automated build from GitHub Actions"
+
