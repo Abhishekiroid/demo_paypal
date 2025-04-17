@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private val mainBinding:ActivityMainBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.activity_main)
     }
+    //private keys
     private val clientID="AVQjx3XNPj8IBvf6wQ9gxBZeryIdPu8PMUaZglq-_cizJLE76ZZM1F0vW4XmgS8AXKsavO8TWxiZrNDF"
     private val secretID="EBce2nCUmufmuSDxfUs5eBqBhtclDYr1BsombthGaokygIt-x1pb_3G7wJJ0X5zHXLeSQOhtNj5TNCgX"
     private val returnUrl="com.example.demo_paypal://demoapp"
