@@ -52,6 +52,7 @@ jobs:
 
 
       - name: Upload Artifact to Testfairy
+        if: github.event_name == 'push'
         run: |
           curl https://upload.testfairy.com/api/upload \
           -F api_key="${{ secrets.TESTFAIRY_KEY }}" \
