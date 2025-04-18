@@ -2,7 +2,7 @@ name: PAYPAL CI-CD
 
 on:
   push:
-    branches: [ "Abhishek_Dev" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
